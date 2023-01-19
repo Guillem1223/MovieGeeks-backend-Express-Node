@@ -22,6 +22,7 @@ UserController.getAll = async (req, res) => {
 UserController.rentUserMovies = async (req, res) => {
   console.log(req.params);
   try {
+    console.log(req.params.userId);
     const user = await User.findById(req.params.userId);
     const movie = req.body;
     // const match = user.movies.find((m) => m._id == movie._id);
@@ -71,6 +72,17 @@ UserController.deleteUserMovies = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+UserController.deleteById = async (req, res) => {
+  try {
+    const deletedOne = await User.deleteOne({ _id: req.params.id });
+    res.json({
+      message: `${req.params.id} DELETED`,
+      data: deletedOne,
+    });
+  } catch (error) {
+    res.status(500).send("internal error");
   }
 };
 

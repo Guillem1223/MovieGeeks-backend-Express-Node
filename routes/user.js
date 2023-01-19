@@ -9,4 +9,5 @@ import verifyToken from "../middelwares/verifyToken.js";
 router.get("/", verifyToken, isSuperAdmin, UserController.getAll);
 router.patch("/users/:userId/rent/:movieId", UserController.rentUserMovies);
 router.patch("/users/:userId/delete/:movieId", UserController.deleteUserMovies);
+router.delete("/delete/:id", UserController.deleteById);
 export default router;
