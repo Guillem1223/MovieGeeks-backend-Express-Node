@@ -19,12 +19,37 @@ UserController.getAll = async (req, res) => {
     });
   }
 };
+UserController.getById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+
+    const user = await User.findOne({ _id: id }).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User Data Retrieved Successfully",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
 UserController.rentUserMovies = async (req, res) => {
   console.log(req.params);
   try {
     console.log(req.params.userId);
     const user = await User.findById(req.params.userId);
     const movie = req.body;
+    console.log(movie);
     // const match = user.movies.find((m) => m._id == movie._id);
     const match = false;
     if (match) {
@@ -35,7 +60,7 @@ UserController.rentUserMovies = async (req, res) => {
     } else {
       const updatedUser = await User.updateOne(
         { _id: req.params.userId },
-        { $push: { movies: req.params.movieId } }
+        { $push: { movies: movie } }
       );
       res.json({
         message: "User movies updated successfully",
